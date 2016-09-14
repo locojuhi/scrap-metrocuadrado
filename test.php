@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">';
+/*Dont Use!*/
     include './Property.php';
     include './simple_html_dom.php';
     $site = new simple_html_dom();
@@ -33,7 +33,7 @@ echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3
         unset($detailsSite);
         $object = new Property($price, $title, $url, $description, $latitud, $longitud);
         
-        /*echo "<br>";
+        echo "<br>";
         echo "title ".$object->name;
         echo "<br>";
         echo "price ".$object->price;
@@ -55,7 +55,7 @@ echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3
         echo "Logitud ".$object->latitud;
         echo "<br>";
         echo "Latitud ".$object->longitud;
-        echo "<br>";*/
+        echo "<br>";
         
     }
     $site->clear(); 

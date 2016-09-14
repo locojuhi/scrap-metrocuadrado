@@ -49,55 +49,27 @@ class Property {
         }
         $arrayuotput = array_combine ( $indexarray , $valuesarray );
         echo "<pre>";
-        print_r($arrayuotput);
         echo "</pre>";
         foreach ($arrayuotput as $key => $value) {
             if(preg_match ('/Barrio/' , utf8_encode($key))){
                 $this->neighborhood = utf8_encode($value);
             }elseif (preg_match ('/Estrato/' , utf8_encode($key))) {
                 $this->stratum = utf8_encode($value);
-            }elseif (preg_match ('/rea privada/' , utf8_encode($key))) {
+            }elseif (preg_match ('/(.rea\Wprivada)/' , utf8_encode($key))) {
                 $this->privateArea = utf8_encode($value);
-            }elseif (preg_match ('/rea construida/' , utf8_encode($key))) {
+            }elseif (preg_match ('/(.rea\Wconstruida)/' , utf8_encode($key))) {
                 $this->buildArea = utf8_encode($value);
+            }elseif (preg_match ('/(.rea\WConstruida)/' , utf8_encode($key))) {
+                $this->buildArea = utf8_encode($value);
+            }elseif (preg_match ('/(.rea)/' , utf8_encode($key))) {
+                $this->privateArea = utf8_encode($value);
             }elseif (preg_match ('/Habitaciones/' , utf8_encode($key))) {
-                $this->room = utf8_encode($value);
+                $this->room = $value;
             }elseif (preg_match ('/Ba(.*)os/' , utf8_encode($key))) {
                 $this->bathroom = $value;
             }elseif (preg_match ('/Tiempo de Construcción/' , utf8_encode($key))) {
                 $this->buildingTime = utf8_encode($value);
             }
-            
-            /*switch (utf8_encode($key)) {
-                case , $match ):
-                    $this->neighborhood = utf8_encode($value);
-                    echo "paso a barrio";
-                    break;
-                case utf8_encode('Estrato:'):
-                    $this->stratum = utf8_encode($value);
-                    break;
-                case utf8_encode('Area privada:'):
-                    $this->privateArea = utf8_encode($value);
-                    break;
-                case utf8_encode('Area construida:'):
-                    $this->buildArea = utf8_encode($value);
-                    break;
-                case utf8_encode('Habitaciones:'):
-                    $this->room = utf8_encode($value);
-                    break;
-                case utf8_encode('Baños:'):
-                    $this->bathroom = utf8_encode($value);
-                    break;
-                case utf8_encode('Tiempo de Construcción:'):
-                    $this->buildingTime = utf8_encode($value);
-                    break;
-                case utf8_encode('Niveles:'):
-                    $this->level = utf8_encode($value);
-                    break;
-                
-                default:
-                    break;
-            }*/
         }
     }
 

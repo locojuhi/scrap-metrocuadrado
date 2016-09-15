@@ -9,7 +9,7 @@
 /**
  * Description of ScrapUrl
  *
- * @author USER
+ * @author Danny Torres
  */
 include './Property.php';
 include './simple_html_dom.php'; 
@@ -17,6 +17,7 @@ class ScrapUrl {
     public $url;
     function __construct($url) {
         $this->url = $url;
+        $this->ExecuteUrlScrapper();
     }
     public function  ExecuteUrlScrapper(){
         $numberIdObject = 1;

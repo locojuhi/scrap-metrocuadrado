@@ -11,6 +11,7 @@
  *
  * @author USER
  */
+
 class Property {
     //put your code here
     public $id;
@@ -71,6 +72,143 @@ class Property {
                 $this->buildingTime = utf8_encode($value);
             }
         }
+    }
+    function getId() {
+        return $this->id;
+    }
+
+    function getPrice() {
+        return $this->price;
+    }
+
+    function getName() {
+        return $this->name;
+    }
+
+    function getUrl() {
+        return $this->url;
+    }
+
+    function getNeighborhood() {
+        return $this->neighborhood;
+    }
+
+    function getStratum() {
+        return $this->stratum;
+    }
+
+    function getPrivateArea() {
+        return $this->privateArea;
+    }
+
+    function getBuildArea() {
+        return $this->buildArea;
+    }
+
+    function getRoom() {
+        return $this->room;
+    }
+
+    function getBathroom() {
+        return $this->bathroom;
+    }
+
+    function getLevel() {
+        return $this->level;
+    }
+
+    function getBuildingTime() {
+        return $this->buildingTime;
+    }
+
+    function getLatitud() {
+        return $this->latitud;
+    }
+
+    function getLongitud() {
+        return $this->longitud;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
+    function setPrice($price) {
+        $this->price = $price;
+    }
+
+    function setName($name) {
+        $this->name = $name;
+    }
+
+    function setUrl($url) {
+        $this->url = $url;
+    }
+
+    function setNeighborhood($neighborhood) {
+        $this->neighborhood = $neighborhood;
+    }
+
+    function setStratum($stratum) {
+        $this->stratum = $stratum;
+    }
+
+    function setPrivateArea($privateArea) {
+        $this->privateArea = $privateArea;
+    }
+
+    function setBuildArea($buildArea) {
+        $this->buildArea = $buildArea;
+    }
+
+    function setRoom($room) {
+        $this->room = $room;
+    }
+
+    function setBathroom($bathroom) {
+        $this->bathroom = $bathroom;
+    }
+
+    function setLevel($level) {
+        $this->level = $level;
+    }
+
+    function setBuildingTime($buildingTime) {
+        $this->buildingTime = $buildingTime;
+    }
+
+    function setLatitud($latitud) {
+        $this->latitud = $latitud;
+    }
+
+    function setLongitud($longitud) {
+        $this->longitud = $longitud;
+    }
+
+    public function save(){
+        include './ConnectionDB.php';
+        $data = new ConnectionDB();
+        $db = $data->con;
+        if(!empty($this->price) && !empty($this->name) && !empty($this->url && !empty($this->neighborhood))){
+            $insert = $db->prepare("insert into properties (activo, vendido, calificacion, precio, nuevo, remate, metros, estrato, banos, parqueaderos, habitaciones, ascensor, direccion, googlemap, streetviewm, description, opcional) values (:activo, :vendido, :calificacion, :precio, :nuevo, :remate, :metros, :estrato, :banos, :parqueaderos, :habitaciones, :ascensor, :direccion, :googlemap, :streetviewm, :description, :opcional)");
+            $sentencia->execute(":activo" => 1, ":vendido" => 0, ":calificacion" => 5, ":precio" => , ":nuevo" => , ":remate" => , ":metros" => , ":estrato" => , ":banos" => , ":parqueaderos" => , ":habitaciones" => , ":ascensor" => , ":direccion" => , ":googlemap" => , ":streetviewm" => , ":description" => , ":opcional" => );
+            
+        }
+        $this->price;
+        $this->name;
+        $this->url;
+        $this->neighborhood;
+        
+        $this->stratum;
+        $this->privateArea;
+        $this->buildArea;
+        $this->room;
+        $this->bathroom;
+        $this->level;
+        $this->buildingTime;
+        $this->latitud;
+        $this->longitud;
+    
     }
 
 }

@@ -48,7 +48,7 @@ class Scrap {
             $detailsSite->clear(); 
             unset($detailsSite);
             $object = new Property($price, $title, $url, $description, $latitud, $longitud);
-            echo $numberIdObject++;
+            /*echo $numberIdObject++;
             echo "<br>";
             echo "title ".$object->name;
             echo "<br>";
@@ -71,7 +71,7 @@ class Scrap {
             echo "Logitud ".$object->latitud;
             echo "<br>";
             echo "Latitud ".$object->longitud;
-            echo "<br>";
+            echo "<br>";*/
              
             
         }

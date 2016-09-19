@@ -12,13 +12,13 @@
             $sentencia->execute();
             $results =  $sentencia->fetchAll();
             foreach ($results as $result){
-                if($result['url'] == trim ($line, " \t\n\r\0\x0B")){
-                    if(!in_array(trim ($line, " \t\n\r\0\x0B"), $notadded, true)){
+                if($result['url'] == trim ($line, "\t\n\r\0\x0B")){
+                    if(!in_array(trim ($line, "\t\n\r\0\x0B"), $notadded, true)){
                         array_push($notadded, trim ($line, " \t\n\r\0\x0B"));
                     }else{
                     }
                 }else{
-                    if(!in_array(trim ($line, " \t\n\r\0\x0B"), $added, true)){
+                    if(!in_array(trim ($line, "\t\n\r\0\x0B"), $added, true)){
                         array_push($added, trim ($line, " \t\n\r\0\x0B"));
                     }else{       
                     }
@@ -74,7 +74,7 @@
             </div>
             <div id="results"></div>
         </div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small modal</button>
+      
 
         <div id="myModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" data-backdrop='static' aria-labelledby="mySmallModalLabel">
           <div class="modal-dialog modal-lg" role="document">
@@ -124,10 +124,10 @@
             $('#progressbar').attr( "aria-valuenow", number);
             $('#progressbar').attr( "style", "width: "+number+"%");
             $('#progressbarspan').text(number+"%");
-            if(number <= 100){
-                $("#closeModal").attr( "style", "display: true;");
-            }else{
+            if(number < 100){
                 $("#closeModal").attr( "style", "display: none;");
+            }else{
+                $("#closeModal").attr( "style", "display: true;");
             }
         }
         function closeModal(){

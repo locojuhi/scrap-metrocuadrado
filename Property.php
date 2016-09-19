@@ -32,7 +32,9 @@ class Property {
     
     
     function __construct($price, $name, $url, $metadata, $latitud, $longitud) {
-        $this->price = $price;
+        preg_match("/\d+/",preg_replace("/\./","", preg_replace ("/(\t)/","", preg_replace("/ /","",$price))), $innerprice);
+        //print_r($innerprice);
+        $this->price = $innerprice['0'];
         $this->name = $name;
         $this->url = $url;
         $this->latitud = $latitud;
@@ -40,7 +42,6 @@ class Property {
         $indexarray = array();
         $valuesarray = array();
         $arrayuotput = array();
-        echo "<hr>";
         for ($i = 0; $i <= count($metadata)-1; $i++) {
             if(($i % 2) == 0){
                 array_push($indexarray,$metadata[$i]);
@@ -49,29 +50,28 @@ class Property {
             }
         }
         $arrayuotput = array_combine ( $indexarray , $valuesarray );
-        echo "<pre>";
-        echo "</pre>";
         foreach ($arrayuotput as $key => $value) {
             if(preg_match ('/Barrio/' , utf8_encode($key))){
-                $this->neighborhood = utf8_encode($value);
+                $this->neighborhood = preg_replace ("/(\t)/","", preg_replace("/(\s)/", "", $value));
             }elseif (preg_match ('/Estrato/' , utf8_encode($key))) {
-                $this->stratum = utf8_encode($value);
+                $this->stratum = preg_replace ("/(\t)/","", preg_replace("/(\s+)/", "",$value));
             }elseif (preg_match ('/(.rea\Wprivada)/' , utf8_encode($key))) {
-                $this->privateArea = utf8_encode($value);
+                $this->privateArea = preg_replace ("/(\t)/","", preg_replace("/(\s+)/","", preg_replace("/(mts2)/","",$value)));
             }elseif (preg_match ('/(.rea\Wconstruida)/' , utf8_encode($key))) {
-                $this->buildArea = utf8_encode($value);
+                $this->buildArea = preg_replace ("/(\t)/","", preg_replace("/(\s+)/","", preg_replace("/(mts2)/","",$value)));
             }elseif (preg_match ('/(.rea\WConstruida)/' , utf8_encode($key))) {
-                $this->buildArea = utf8_encode($value);
+                $this->buildArea = preg_replace ("/(\t)/","", preg_replace("/(\s+)/","", preg_replace("/(mts2)/","",$value)));
             }elseif (preg_match ('/(.rea)/' , utf8_encode($key))) {
-                $this->privateArea = utf8_encode($value);
+                $this->privateArea = preg_replace ("/(\t)/","", preg_replace("/(\s+)/", "",$value));
             }elseif (preg_match ('/Habitaciones/' , utf8_encode($key))) {
-                $this->room = $value;
+                $this->room = preg_replace ("/(\t)/","", preg_replace("/(\s+)/", "",$value));
             }elseif (preg_match ('/Ba(.*)os/' , utf8_encode($key))) {
-                $this->bathroom = $value;
+                $this->bathroom = preg_replace ("/(\t)/","", preg_replace("/(\s+)/", "",$value));
             }elseif (preg_match ('/Tiempo de Construcción/' , utf8_encode($key))) {
-                $this->buildingTime = utf8_encode($value);
+                $this->buildingTime = preg_replace ("/(\t)/","", preg_replace("/(\s+)/", "",$value));
             }
         }
+        $this->save();
     }
     function getId() {
         return $this->id;
@@ -187,28 +187,63 @@ class Property {
 
     public function save(){
         include './ConnectionDB.php';
-        $data = new ConnectionDB();
-        $db = $data->con;
-        if(!empty($this->price) && !empty($this->name) && !empty($this->url && !empty($this->neighborhood))){
-            $insert = $db->prepare("insert into properties (activo, vendido, calificacion, precio, nuevo, remate, metros, estrato, banos, parqueaderos, habitaciones, ascensor, direccion, googlemap, streetviewm, description, opcional) values (:activo, :vendido, :calificacion, :precio, :nuevo, :remate, :metros, :estrato, :banos, :parqueaderos, :habitaciones, :ascensor, :direccion, :googlemap, :streetviewm, :description, :opcional)");
-            $sentencia->execute(":activo" => 1, ":vendido" => 0, ":calificacion" => 5, ":precio" => , ":nuevo" => , ":remate" => , ":metros" => , ":estrato" => , ":banos" => , ":parqueaderos" => , ":habitaciones" => , ":ascensor" => , ":direccion" => , ":googlemap" => , ":streetviewm" => , ":description" => , ":opcional" => );
-            
+        if(!empty($this->price) && !empty($this->name) && !empty($this->url && !empty($this->neighborhood && !empty($this->buildArea)))){
+            try {
+                $data = new ConnectionDB();
+                $db = $data->con;
+                $insert = $db->prepare("INSERT INTO properties (activo, vendido, calificacion, precio, nuevo, remate, metros, estrato, banos, parqueaderos, habitaciones, ascensor, direccion, googlemap, streetview, descripcion, opcional ,url) VALUES (:activo, :vendido, :calificacion, :precio, :nuevo, :remate, :metros, :estrato, :banos, :parqueaderos, :habitaciones, :ascensor, :direccion, :googlemap, :streetview, :description, :opcional, :url)");
+                $query = $insert->execute(array(
+                    ":activo" => 0, 
+                    ":vendido" => 0,
+                    ":calificacion" => 5,
+                    ":precio" => $this->price,
+                    ":nuevo" => 1, 
+                    ":remate" => 0, 
+                    ":metros" => $this->buildArea, 
+                    ":estrato" => $this->stratum, 
+                    ":banos" => $this->bathroom, 
+                    ":parqueaderos" => 0, 
+                    ":habitaciones" => $this->room, 
+                    ":ascensor" => 0  , 
+                    ":direccion" => $this->neighborhood, 
+                    ":googlemap" => $this->longitud.','.$this->latitud, 
+                    ":streetview" => 0, 
+                    ":description" => 0, 
+                    ":opcional" => 0, 
+                    ":url" => $this->url)); 
+                if($query){
+                    echo "Agregado en la base de datos: ".$this->url;
+                }else{
+                    echo "No se ha agregado en la base de datos: ".$this->url;
+                    echo "<h1>parametros enviados:</h1>";
+                    echo "<pre>";
+                    echo "activo: " . "1"."<br>";
+                    echo "vendido: " ."0"."<br>"; 
+                    echo "calificacion: " . "5"."<br>";
+                    echo "precio: " . $this->price."<br>"; 
+                    echo "nuevo: " . "0"."<br>";
+                    echo "remate: " . "0"."<br>"; 
+                    echo "metros: " . $this->buildArea."<br>";
+                    echo "estrato: " . $this->stratum."<br>"; 
+                    echo "banos: " . $this->bathroom."<br>";
+                    echo "parqueaderos: " . "0"."<br>";
+                    echo "habitaciones: " . $this->room."<br>";
+                    echo "ascensor: " . "0"."<br>"; 
+                    echo "direccion: " . $this->neighborhood."<br>";
+                    echo "googlemap: " . $this->longitud.",".$this->latitud."<br>";
+                    echo "streetview: " . "0"."<br>";
+                    echo "description: " . "0"."<br>";
+                    echo "opcional: " . "0";
+                    echo "</pre>";
+                    echo "<hr>";
+                    
+                }
+                
+                
+            } catch (Exception $exc) {
+                echo $exc->getTraceAsString();
+            }  
         }
-        $this->price;
-        $this->name;
-        $this->url;
-        $this->neighborhood;
-        
-        $this->stratum;
-        $this->privateArea;
-        $this->buildArea;
-        $this->room;
-        $this->bathroom;
-        $this->level;
-        $this->buildingTime;
-        $this->latitud;
-        $this->longitud;
-    
     }
 
 }

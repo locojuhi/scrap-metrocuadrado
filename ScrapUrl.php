@@ -50,30 +50,8 @@ class ScrapUrl {
         $site->clear(); 
         unset($site);
         $object = new Property($price, $title, $this->url, $description, $latitud, $longitud);
-        echo $numberIdObject++;
-        echo "<br>";
-        echo "title: ".$object->name;
-        echo "<br>";
-        echo "price: ".$object->price;
-        echo "<br>";
-        echo "barrio: ".$object->neighborhood;
-        echo "<br>";
-        echo "stato: ".$object->stratum;
-        echo "<br>";
-        echo "url: ".$object->url;
-        echo "<br>";
-        echo "area privada: ".$object->privateArea;
-        echo "<br>";
-        echo "area de construccion: ".$object->buildArea;
-        echo "<br>";
-        echo "habitaciones: ".$object->room;
-        echo "<br>";
-        echo "Baños: ".$object->bathroom;
-        echo "<br>";
-        echo "Logitud: ".$object->latitud;
-        echo "<br>";
-        echo "Latitud: ".$object->longitud;
-        echo "<br>";
+        
+        $object->save();
     }
 
 }

@@ -32,11 +32,9 @@ class ScrapUrl {
         //encontrar latiud dede donde esta ubicado el inmueble
         $latitud = $site->find('input[id=latitud]');
         //encontrar la longitud de donde esta ubicado el inmueble
-        $longitud = $site->find('input[id=longitud]'); 
-        //preg_match('/(\$.*\d)/', $link, $coincidenciasprice);
-        //preg_match('/(.*[a-z])/', $link, $coincidenciastitle);
-        //$price = $coincidenciasprice[0];
-        //$title = $coincidenciastitle[0];
+        $longitud = $site->find('input[id=longitud]');
+        //Encontrar el tipo de inmueble
+        preg_match("([\w]+)", $title, $type); 
         $description = array();
         foreach($info->find('li') as $li){
             array_push($description, $li->plaintext);
@@ -49,7 +47,7 @@ class ScrapUrl {
         }
         $site->clear(); 
         unset($site);
-        $object = new Property($price, $title, $this->url, $description, $latitud, $longitud);
+        $object = new Property($price, $title, $this->url, $description, $latitud, $longitud, $type[0]);
         
         $object->save();
     }

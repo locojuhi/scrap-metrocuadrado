@@ -8,7 +8,7 @@
     foreach($lines as $line){
         try {
             $db = $data->con;
-            $sentencia = $db->prepare("Select url from properties");
+            $sentencia = $db->prepare("Select url from inmueble");
             $sentencia->execute();
             $results =  $sentencia->fetchAll();
             foreach ($results as $result){
@@ -35,8 +35,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Scrapper</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
     <body>
         <div class="container">
@@ -111,7 +110,7 @@
                     url: "./ScrapUrlTest.php",
                     data: { url: $(this).text()}
                 }).done(function( msg ) {
-                    $( "#results" ).append( msg );
+                    //$("#results").append(msg);
                     console.log(msg);
                     var result = ((progress+1)*100)/total;
                     progressbarupdate(result);
@@ -146,7 +145,8 @@
         #Inside li, #Outside li {
           margin: 0 5px 5px 5px;
           padding: 5px;
-          font-size: 1.2em;
+          font-size: 0px;
+          max-height:0px;
         }
         #Outside li{
             background-color:#b92c28;

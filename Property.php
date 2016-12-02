@@ -18,7 +18,7 @@ class Property {
     public $price;
     public $name;
     public $url;
-    
+    public $propertyType;
     public $neighborhood;
     public $stratum;
     public $privateArea;
@@ -31,7 +31,7 @@ class Property {
     public $longitud;
     
     
-    function __construct($price, $name, $url, $metadata, $latitud, $longitud) {
+    function __construct($price, $name, $url, $metadata, $latitud, $longitud, $type) {
         preg_match("/\d+/",preg_replace("/\./","", preg_replace ("/(\t)/","", preg_replace("/ /","",$price))), $innerprice);
         //print_r($innerprice);
         $this->price = $innerprice['0'];
@@ -39,6 +39,7 @@ class Property {
         $this->url = $url;
         $this->latitud = $latitud;
         $this->longitud = $longitud;
+        $this->propertyType = $type;
         $indexarray = array();
         $valuesarray = array();
         $arrayuotput = array();
@@ -71,7 +72,31 @@ class Property {
                 $this->buildingTime = preg_replace ("/(\t)/","", preg_replace("/(\s+)/", "",$value));
             }
         }
-        $this->save();
+        switch ($this->propertyType) {
+            case 'Apartamento':
+                $this->propertyType = 2;
+            break;
+            case 'Casa':
+               $this->propertyType = 1; 
+            break;
+            case 'Local':
+               $this->propertyType = 3; 
+            break;
+            case 'Oficina':
+               $this->propertyType = 4; 
+            break;
+            case 'Bodega':
+               $this->propertyType = 5; 
+            break;
+            case 'Finca':
+               $this->propertyType = 6; 
+            break;
+            case 'Lote':
+               $this->propertyType = 7; 
+            break;
+
+        }
+        //$this->save();
     }
     function getId() {
         return $this->id;
@@ -191,7 +216,7 @@ class Property {
             try {
                 $data = new ConnectionDB();
                 $db = $data->con;
-                $insert = $db->prepare("INSERT INTO properties (activo, vendido, calificacion, precio, nuevo, remate, metros, estrato, banos, parqueaderos, habitaciones, ascensor, direccion, googlemap, streetview, descripcion, opcional ,url) VALUES (:activo, :vendido, :calificacion, :precio, :nuevo, :remate, :metros, :estrato, :banos, :parqueaderos, :habitaciones, :ascensor, :direccion, :googlemap, :streetview, :description, :opcional, :url)");
+                $insert = $db->prepare("INSERT INTO inmueble (fecharegistro, activo, vendido, calificacion, precio, nuevo, remate, metros, estrato, banos, parqueaderos, habitaciones, ascensor, direccion, googlemap, streetview, descripcion, opcional2 , url, idtipoinversion, idedadinmueble, idacabados, idzona, opcional3, idciudadinmueble) VALUES ((select curdate()),:activo, :vendido, :calificacion, :precio, :nuevo, :remate, :metros, :estrato, :banos, :parqueaderos, :habitaciones, :ascensor, :direccion, :googlemap, :streetview, :description, :opcional, :url, :tipo, :idedadinmueble, :idacabados, :idzona, :opcional3, :idciudadinmueble)");
                 $query = $insert->execute(array(
                     ":activo" => 0, 
                     ":vendido" => 0,
@@ -204,13 +229,19 @@ class Property {
                     ":banos" => $this->bathroom, 
                     ":parqueaderos" => 0, 
                     ":habitaciones" => $this->room, 
-                    ":ascensor" => 0  , 
+                    ":ascensor" => 0, 
                     ":direccion" => $this->neighborhood, 
                     ":googlemap" => $this->longitud.','.$this->latitud, 
                     ":streetview" => 0, 
                     ":description" => 0, 
                     ":opcional" => 0, 
-                    ":url" => $this->url)); 
+                    ":url" => $this->url,
+                    ":tipo" => $this->propertyType,
+                    ":idedadinmueble" =>3, 
+                    ":idacabados" =>3, 
+                    ":idzona" =>11, 
+                    ":opcional3" => 1789,
+                    ":idciudadinmueble" => 321));
                 if($query){
                     echo "Agregado en la base de datos: ".$this->url;
                 }else{
@@ -233,13 +264,11 @@ class Property {
                     echo "googlemap: " . $this->longitud.",".$this->latitud."<br>";
                     echo "streetview: " . "0"."<br>";
                     echo "description: " . "0"."<br>";
-                    echo "opcional: " . "0";
+                    echo "opcional: " . "0"."<br>";
+                    echo "IdtipoInmueble: " . $this->propertyType."<br>";
                     echo "</pre>";
                     echo "<hr>";
-                    
                 }
-                
-                
             } catch (Exception $exc) {
                 echo $exc->getTraceAsString();
             }  

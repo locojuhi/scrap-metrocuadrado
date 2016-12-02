@@ -14,10 +14,10 @@
  * @author USER
  */
 class ConnectionDB {
-    protected $pass = '';
-    protected $user = 'root';
+    protected $pass = 'DyservetTu@liado8';
+    protected $user = 'tucasasa_dyserve';
     protected $host = 'localhost';
-    protected $db = 'cirri_metrocuadradoscrap';
+    protected $db = 'tucasasa_dyservet';
     public $con;
     function __construct() {
         $this->con = new PDO('mysql:host='.$this->host.';dbname='.$this->db.'', $this->user, $this->pass);
